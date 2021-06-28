@@ -1,16 +1,17 @@
 window.onload = () => {
   initializeGame();
-  if (localStorage.length)
-    score.highScore = parseInt(localStorage.getItem("highScore"));
-  updateScore();
+  if (localStorage.length > 0)
+    score.highScore = parseInt(localStorage.getItem('highScore')) || '0';
+  //updateScore();
 };
 
-document.addEventListener("keydown", whichKeyisPressed);
+document.addEventListener('keydown', whichKeyisPressed);
 
-document.addEventListener("click", (e) => {
-  if (e.target.id === "applySettingsButton") applyGameSettings();
-  if (e.target.id === "clearHighScoreButton") {
+document.addEventListener('click', (e) => {
+  if (e.target.id === 'applySettingsButton') applyGameSettings();
+  if (e.target.id === 'clearHighScoreButton') {
     score.highScore = 0;
+    localStorage.setItem('highScore', score.highScore);
     displayScore();
   }
 });
@@ -22,20 +23,20 @@ const gameSettings = {
   isGameRunning: 0,
   snakeSize: 15,
   appleBaseSize: 30,
-  isOneSecond: 0,
+  isOneSecond: 0
 };
 
 const snake = {
   speedInX: 0,
   speedInY: 0,
   positionX: [400, 400, 400, 400, 400],
-  positionY: [250, 240, 230, 220, 210],
+  positionY: [250, 240, 230, 220, 210]
 };
 
 const apple = {
   positionX: 0,
   positionY: 0,
-  size: 10,
+  size: 10
 };
 
 const score = {
@@ -43,7 +44,7 @@ const score = {
   multiplier: 1,
   gameScore: 0,
   highScore: 0,
-  timer: 5,
+  timer: 10
 };
 
 function initializeGame() {
@@ -54,11 +55,23 @@ function initializeGame() {
     snake.positionY[i] = gameSettings.canvasHeight / 2;
   }
 
-  document.querySelector("#gameCanvas").width = gameSettings.canvasWidth;
-  document.querySelector("#gameCanvas").height = gameSettings.canvasHeight;
-  drawOnCanvas(0, 0, gameSettings.canvasWidth, gameSettings.canvasHeight, "black");
+  document.querySelector('#gameCanvas').width = gameSettings.canvasWidth;
+  document.querySelector('#gameCanvas').height = gameSettings.canvasHeight;
+  drawOnCanvas(
+    0,
+    0,
+    gameSettings.canvasWidth,
+    gameSettings.canvasHeight,
+    'black'
+  );
 
-  writeOnCanvas(((gameSettings.canvasWidth/2) - 125), (gameSettings.canvasHeight/2), "Press Space to Start!", "white");
+  writeOnCanvas(
+    gameSettings.canvasWidth / 2 - 125,
+    gameSettings.canvasHeight / 2,
+
+    'Press Space to Start!',
+    'white'
+  );
 
   placeApple();
 }
@@ -66,12 +79,12 @@ function initializeGame() {
 function whichKeyisPressed(e) {
   const keyPressed = e.key;
 
-  if (keyPressed === " ") toggleGamePause();
+  if (keyPressed === ' ') toggleGamePause();
   if (gameSettings.isGameRunning > 0) {
-    if (keyPressed === "ArrowUp" || keyPressed === "w") turnSnakeUp();
-    if (keyPressed === "ArrowDown" || keyPressed === "s") turnSnakeDown();
-    if (keyPressed === "ArrowLeft" || keyPressed === "a") turnSnakeLeft();
-    if (keyPressed === "ArrowRight" || keyPressed === "d") turnSnakeRight();
+    if (keyPressed === 'ArrowUp' || keyPressed === 'w') turnSnakeUp();
+    if (keyPressed === 'ArrowDown' || keyPressed === 's') turnSnakeDown();
+    if (keyPressed === 'ArrowLeft' || keyPressed === 'a') turnSnakeLeft();
+    if (keyPressed === 'ArrowRight' || keyPressed === 'd') turnSnakeRight();
   }
 }
 
@@ -100,8 +113,8 @@ function runGame() {
   }, gameSettings.refreshRate);
 }
 
-//Was torn between making a turnSnake(keyPressed) function or leave it as it 
-//is shown.  I felt this maximized readability but am anxious to see 
+//Was torn between making a turnSnake(keyPressed) function or leave it as it
+//is shown.  I felt this maximized readability but am anxious to see
 //your opinion.
 function turnSnakeDown() {
   if (snake.speedInY === 0) {
@@ -132,12 +145,18 @@ function turnSnakeRight() {
 }
 
 function drawEverythingElse() {
-  document.querySelector("#gameCanvas").width = gameSettings.canvasWidth;
-  document.querySelector("#gameCanvas").height = gameSettings.canvasHeight;
+  document.querySelector('#gameCanvas').width = gameSettings.canvasWidth;
+  document.querySelector('#gameCanvas').height = gameSettings.canvasHeight;
 
-  drawOnCanvas(0, 0, gameSettings.canvasWidth, gameSettings.canvasHeight, "black");
+  drawOnCanvas(
+    0,
+    0,
+    gameSettings.canvasWidth,
+    gameSettings.canvasHeight,
+    'black'
+  );
 
-  drawOnCanvas(apple.positionX, apple.positionY, apple.size, apple.size, "red");
+  drawOnCanvas(apple.positionX, apple.positionY, apple.size, apple.size, 'red');
 }
 
 function drawSnake() {
@@ -147,7 +166,13 @@ function drawSnake() {
   snake.positionY.unshift(snake.positionY[0] + snake.speedInY);
 
   for (i = 0; i < snake.positionY.length; i++) {
-    drawOnCanvas(snake.positionX[i], snake.positionY[i], gameSettings.snakeSize, gameSettings.snakeSize, "olive");
+    drawOnCanvas(
+      snake.positionX[i],
+      snake.positionY[i],
+      gameSettings.snakeSize,
+      gameSettings.snakeSize,
+      'olive'
+    );
   }
 }
 
@@ -195,7 +220,7 @@ function didEatApple() {
     updateScore();
     placeApple();
     growSnake();
-    score.timer = 5;
+    score.timer = 10;
   }
 }
 
@@ -207,7 +232,7 @@ function resetGame() {
   score.numberApplesEaten = 0;
   score.gameScore = 0;
   score.multiplier = 1;
-  score.timer = 5;
+  score.timer = 10;
   updateMultiplierTimer();
   displayScore();
 }
@@ -254,14 +279,14 @@ function placeApple() {
 }
 
 function updateMultiplierTimer() {
-  const displayMutliplierTimer = document.querySelector("#countDownCounterDiv");
+  const displayMutliplierTimer = document.querySelector('#countDownCounterDiv');
 
   if (gameSettings.isGameRunning) {
     if (score.timer) {
       score.timer--;
       displayMutliplierTimer.innerHTML = `:${score.timer}`;
     } else {
-      displayMutliplierTimer.innerHTML = ":--";
+      displayMutliplierTimer.innerHTML = ':--';
       score.multiplier = 1;
       displayScore();
     }
@@ -275,82 +300,85 @@ function updateScore() {
   if (snake.speedInY) snakeSpeed = Math.abs(snake.speedInY);
 
   score.gameScore += Math.floor(
-    100000 *
-      score.multiplier *
-      score.multiplier *
-      (1 / apple.size) *
-      (1 / gameSettings.canvasWidth) *
-      snakeSpeed
+    score.multiplier * 10
+    // score.multiplier *
+    // (1 / apple.size) *
+    // (1 / gameSettings.canvasWidth) *
+    // snakeSpeed
   );
 
   if (score.gameScore > score.highScore) {
     score.highScore = score.gameScore;
-    localStorage.setItem("highScore", score.highScore);
+    localStorage.setItem('highScore', score.highScore);
   }
 
   displayScore();
 }
 
+console.log('highScore: ', score.highScore);
+
 function displayScore() {
-  const displayApplesEaten = document.querySelector("#applesEatenSpan");
+  const displayApplesEaten = document.querySelector('#applesEatenSpan');
   displayApplesEaten.innerHTML = `${score.numberApplesEaten}`;
 
-  const displayMutliplier = document.querySelector("#multiplierSpan");
+  const displayMutliplier = document.querySelector('#multiplierSpan');
   displayMutliplier.innerHTML = `${score.multiplier}`;
 
-  const displayGameScore = document.querySelector("#currentScoreDiv");
-  displayGameScore.innerHTML = `${score.gameScore}`;
+  const displayGameScore = document.querySelector('#currentScoreDiv');
+  displayGameScore.innerHTML = `${
+    score.numberApplesEaten === 0 ? '0' : score.gameScore
+  }`;
 
-  const displayHighScore = document.querySelector("#highScoreDiv");
+  const displayHighScore = document.querySelector('#highScoreDiv');
   displayHighScore.innerHTML = `${score.highScore}`;
 }
 
-function drawOnCanvas (startCordinate, endCordinate, width, height, color){
-  const canvas = document.querySelector("#gameCanvas");
-  const canvasContext = canvas.getContext("2d");
+function drawOnCanvas(startCordinate, endCordinate, width, height, color) {
+  const canvas = document.querySelector('#gameCanvas');
+  const canvasContext = canvas.getContext('2d');
 
   canvasContext.fillStyle = color;
   canvasContext.fillRect(startCordinate, endCordinate, width, height);
 }
 
-function writeOnCanvas (startCordinate, endCordinate, text, color){
-  const canvas = document.querySelector("#gameCanvas");
-  const canvasContext = canvas.getContext("2d");
+function writeOnCanvas(startCordinate, endCordinate, text, color) {
+  const canvas = document.querySelector('#gameCanvas');
+  const canvasContext = canvas.getContext('2d');
 
-  canvasContext.font = "30px VT323";
+  canvasContext.font = '30px VT323';
   canvasContext.fillStyle = color;
   canvasContext.fillText(text, startCordinate, endCordinate);
 }
 
 function applyGameSettings() {
-  const canvasSizeSelected = document.getElementsByName("canvasSize");
-  let canvasSize = "";
+  const canvasSizeSelected = document.getElementsByName('canvasSize');
+  let canvasSize = '';
   for (let i = 0; i < canvasSizeSelected.length; i++) {
     if (canvasSizeSelected[i].checked) canvasSize = canvasSizeSelected[i].value;
   }
-  if (canvasSize === "small") {
+  if (canvasSize === 'small') {
     gameSettings.canvasWidth = 300;
     gameSettings.canvasHeight = 300;
-  } else if (canvasSize === "medium") {
+  } else if (canvasSize === 'medium') {
     gameSettings.canvasWidth = 500;
     gameSettings.canvasHeight = 400;
-  } else if (canvasSize === "large") {
+  } else if (canvasSize === 'large') {
     gameSettings.canvasWidth = 600;
     gameSettings.canvasHeight = 500;
   }
 
-  const userDesiredSnakeSpeed = document.getElementsByName("snakeSpeed");
+  const userDesiredSnakeSpeed = document.getElementsByName('snakeSpeed');
   for (let i = 0; i < userDesiredSnakeSpeed.length; i++) {
     if (userDesiredSnakeSpeed[i].checked)
       gameSettings.refreshRate = parseInt(userDesiredSnakeSpeed[i].value);
   }
 
-  const appleSizeSelected = document.getElementsByName("appleSize");
+  const appleSizeSelected = document.getElementsByName('appleSize');
   for (let i = 0; i < appleSizeSelected.length; i++) {
     if (appleSizeSelected[i].checked) apple.size = appleSizeSelected[i].value;
   }
 
-  const snakeSizeSelected = document.getElementsByName("snakeSize");
+  const snakeSizeSelected = document.getElementsByName('snakeSize');
   for (let i = 0; i < snakeSizeSelected.length; i++) {
     if (snakeSizeSelected[i].checked)
       gameSettings.snakeSize = parseInt(snakeSizeSelected[i].value);
@@ -358,3 +386,28 @@ function applyGameSettings() {
 
   initializeGame();
 }
+
+// Get the modal
+const modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+const btn = document.getElementById('myBtn');
+
+// Get the <span> element that closes the modal
+const span = document.getElementsByClassName('close')[0];
+
+// When the user clicks the button, open the modal
+btn.addEventListener('click', function () {
+  modal.style.display = 'block';
+});
+// When the user clicks on <span> (x), close the modal
+span.addEventListener('click', function () {
+  modal.style.display = 'none';
+});
+
+// When the user clicks anywhere outside of the modal, close it
+window.addEventListener('click', function (event) {
+  if (event.target == modal) {
+    modal.style.display = 'none';
+  }
+});

@@ -13,6 +13,28 @@
     <h1>Snake Game</h1>
     <p>created by: Nathan McCraw</p>
   </header>
+
+<!-- Trigger/Open The Modal -->
+<div id="modalBtn">
+  <button id="myBtn">Click to see rules.</button>
+</div>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">X</span>
+    <h2>Rules</h2>
+    <p>1. The snake must hit the apple to increase the score.</p>
+    <p>2. If you hit the edges of the square it's game over.</p>
+    <p>3. If the snake eats the apple before the timer reaches zero, you will increment the multiplier by one.</p>
+    <p>4. Your score is  (multiplier X 10) + the previous score.</p>
+    <p>5. The higher you can increment the multiplier, the higher your score will be.</p>
+  </div>
+
+</div>
   <div id="canvasAndSettingsDiv">
     <div id="multiplierCountDownDiv">
       <div id="countDownTitleDiv">Multiplier Reset:</div>
@@ -85,9 +107,7 @@
           <label for="largeCanvas">Large</label>
         </div>
       </div>
-      <div id="clearHighScoreDiv">
-        <button id="clearHighScoreButton">Clear High Score</button>
-      </div>
+   
       <div id="applySettingsDiv">
         <button id="applySettingsButton">Apply Settings</button>
       </div>
@@ -108,12 +128,16 @@
         <div id="currentScoreDiv">10347</div>
       </div>
       <div id="rightFooterDiv">
-        <div id="highScoreTitleDiv">High Score:</div>
-        <div id="highScoreDiv">25863</div>
+        <div id="highScoreTitleDiv">High Score: </div>
+        <div id="highScoreDiv"></div>
+      </div>
+      <div id="clearHighScoreDiv">
+        <button id="clearHighScoreButton">Clear High Score</button>
       </div>
     </div>
   </footer>
   <script src="script.js"></script>
 </body>
+
 
 </html>
