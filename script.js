@@ -29,14 +29,22 @@ const gameSettings = {
 const snake = {
   speedInX: 0,
   speedInY: 0,
-  positionX: [400, 400, 400, 400, 400],
-  positionY: [250, 240, 230, 220, 210]
+  body: [
+    { x: 400, y: 250 },
+    { x: 400, y: 240 },
+    { x: 400, y: 230 },
+    { x: 400, y: 220 },
+    { x: 400, y: 210 }
+  ]
+  // positionX: [400, 400, 400, 400, 400],
+  // positionY: [250, 240, 230, 220, 210]
 };
 
 const apple = {
   positionX: 0,
   positionY: 0,
-  size: 10
+  size: 10,
+  color: 'red'
 };
 
 const score = {
@@ -48,12 +56,22 @@ const score = {
 };
 
 function initializeGame() {
-  snake.positionX.splice(4);
-  snake.positionY.splice(4);
-  for (i = 0; i < 5; i++) {
-    snake.positionX[i] = gameSettings.canvasWidth / 2;
-    snake.positionY[i] = gameSettings.canvasHeight / 2;
-  }
+  // snake.body.x.splice(4);
+  // snake.body.y.splice(4);
+  // for (i = 0; i < 5; i++) {
+  //   snake.body.x[i] = gameSettings.canvasWidth / 2;
+  //   snake.body.y[i] = gameSettings.canvasHeight / 2;
+  // }
+
+  snake.body.forEach((part) => {
+    drawOnCanvas(
+      part.x,
+      part.y,
+      gameSettings.snakeSize,
+      gameSettings.snakeSize,
+      'olive'
+    );
+  });
 
   document.querySelector('#gameCanvas').width = gameSettings.canvasWidth;
   document.querySelector('#gameCanvas').height = gameSettings.canvasHeight;
@@ -160,15 +178,12 @@ function drawEverythingElse() {
 }
 
 function drawSnake() {
-  snake.positionX.pop();
-  snake.positionY.pop();
-  snake.positionX.unshift(snake.positionX[0] + snake.speedInX);
-  snake.positionY.unshift(snake.positionY[0] + snake.speedInY);
+  // addNewSnakePart();
 
-  for (i = 0; i < snake.positionY.length; i++) {
+  for (i = 0; i < snake.body.length; i++) {
     drawOnCanvas(
-      snake.positionX[i],
-      snake.positionY[i],
+      snake.body.x,
+      snake.body.y,
       gameSettings.snakeSize,
       gameSettings.snakeSize,
       'olive'
@@ -176,15 +191,22 @@ function drawSnake() {
   }
 }
 
+// function addNewSnakePart() {
+//   snake.body.x;
+//   snake.body.y;
+//   snake.body.x.unshift(snake.body.x[0] + snake.speedInX);
+//   snake.body.y.unshift(snake.body.y[0] + snake.speedInY);
+// }
+
 function didSnakeCollideWithSelf() {
-  for (i = 2; i < snake.positionX.length; i++)
+  for (i = 2; i < snake.body.length; i++)
     if (
       doesCollide(
-        snake.positionX[0],
-        snake.positionY[0],
+        snake.body.x,
+        snake.body.y,
         gameSettings.snakeSize,
-        snake.positionX[i],
-        snake.positionY[i],
+        snake.body.x,
+        snake.body.y,
         gameSettings.snakeSize
       )
     )
@@ -193,13 +215,13 @@ function didSnakeCollideWithSelf() {
 
 function isSnakeInbounds() {
   if (
-    snake.positionX[0] <= 0 ||
-    snake.positionX[0] > gameSettings.canvasWidth - gameSettings.snakeSize
+    snake.body.x <= 0 ||
+    snake.body.x > gameSettings.canvasWidth - gameSettings.snakeSize
   )
     resetGame();
   if (
-    snake.positionY[0] <= 0 ||
-    snake.positionY[0] > gameSettings.canvasHeight - gameSettings.snakeSize
+    snake.body.y <= 0 ||
+    snake.body.y > gameSettings.canvasHeight - gameSettings.snakeSize
   )
     resetGame();
 }
@@ -210,8 +232,8 @@ function didEatApple() {
       apple.positionX,
       apple.positionY,
       apple.size,
-      snake.positionX[0],
-      snake.positionY[0],
+      snake.positionX,
+      snake.body.y,
       gameSettings.snakeSize
     )
   ) {
@@ -248,8 +270,8 @@ function doesCollide(obj1X, obj1Y, obj1Size, obj2X, obj2Y, obj2Size) {
 }
 
 function growSnake() {
-  snake.positionX.push(snake.positionX[0]);
-  snake.positionY.push(snake.positionY[0]);
+  snake.body.x.push(snake.body.x[0]);
+  snake.body.y.push(snake.body.y[0]);
 }
 
 function placeApple() {
@@ -264,14 +286,14 @@ function placeApple() {
     Math.random() * (gameSettings.canvasHeight - apple.size)
   );
 
-  for (i = 0; i < snake.positionX.length; i++)
+  for (i = 0; i < snake.body.length; i++)
     if (
       doesCollide(
         apple.positionX,
         apple.positionY,
         apple.size,
-        snake.positionX[i],
-        snake.positionY[i],
+        snake.body.x,
+        snake.body.y,
         gameSettings.snakeSize
       )
     )
