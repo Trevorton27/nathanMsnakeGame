@@ -179,7 +179,10 @@ function drawEverythingElse() {
 
 function drawSnake() {
   // addNewSnakePart();
-
+  snake.body.x;
+  snake.body.y;
+  snake.body.x.unshift(snake.body.x[0] + snake.speedInX);
+  snake.body.y.unshift(snake.body.y[0] + snake.speedInY);
   for (i = 0; i < snake.body.length; i++) {
     drawOnCanvas(
       snake.body.x,
@@ -192,10 +195,7 @@ function drawSnake() {
 }
 
 // function addNewSnakePart() {
-//   snake.body.x;
-//   snake.body.y;
-//   snake.body.x.unshift(snake.body.x[0] + snake.speedInX);
-//   snake.body.y.unshift(snake.body.y[0] + snake.speedInY);
+
 // }
 
 function didSnakeCollideWithSelf() {
